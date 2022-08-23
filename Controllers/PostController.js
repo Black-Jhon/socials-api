@@ -1,4 +1,6 @@
 import PostModel from "../Models/PostModel.js";
+import UserModel from "../Models/User.js";
+import mongoose from "mongoose";
 
 // Create Posts
 export const createPost = async (req, res) => {
@@ -86,6 +88,43 @@ export const likePost = async (req, res) => {
             await post.updateOne({$pull: {likes: userId}});
             res.status(200).json("Post unliked!");
         }
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+};
+
+// Get Timeline Post
+export const getTimeLinePost = async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const currentUserPost = await PostModel.find({userId: userId});
+        const followingPosts = await UserModel.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(userId)
+                }
+            },
+            {
+                $lookup: {
+                    from: "posts",
+                    localField: "following",
+                    foreignField: "userId",
+                    as: "followingPosts"
+                }
+            },
+            {
+                $project: {
+                    followingPosts: 1,
+                    _id: 0
+                }
+            }
+        ]);
+        res.status(200)
+            .json(currentUserPost.concat(...followingPosts[0].followingPosts)
+                .sort((a, b) => {
+                    return b.createdAt - a.createdAt;
+                }));
     } catch (error) {
         res.status(500).json({message: error.message});
     }
