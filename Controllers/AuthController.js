@@ -1,3 +1,4 @@
+// @ts-nocheck
 import UserModel from "../Models/User.js";
 import bcrypt from "bcrypt";
 

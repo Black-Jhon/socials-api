@@ -1,3 +1,4 @@
+// @ts-nocheck
 import PostModel from "../Models/PostModel.js";
 import UserModel from "../Models/User.js";
 import mongoose from "mongoose";
