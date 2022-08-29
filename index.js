@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import userRoute from "./Routes/UserRoute.js";
 import postRoute from "./Routes/PostRoute.js";
 import cors from "cors";
+import uploadRoute from "./Routes/UploadRoute.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(cors());
 app.use("/auth", authRoute);
 app.use("/user", userRoute);
 app.use("/post", postRoute);
+app.use("/upload", uploadRoute);
 
 // DB Configuration
 mongoose
