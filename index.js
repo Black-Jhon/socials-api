@@ -12,6 +12,10 @@ import uploadRoute from "./Routes/UploadRoute.js";
 
 const app = express();
 
+// Serving images for public use
+app.use(express.static("public"));
+app.use("/images", express.static("images"));
+
 // Middlewares
 app.use(express.json());
 app.use(cors());
